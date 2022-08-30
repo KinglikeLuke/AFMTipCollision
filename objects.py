@@ -7,9 +7,10 @@ class Tip:
     def __init__(self, corners):
         """
 
-        1d array :param corners: the corners of the outline of the tip
+        2d array :param corners: the coordinates of the corners  of the outline of the tip
         """
         self.corners = corners
+        self.shape = interpolate.interp1d(*corners)
 
 
 class Sample:
@@ -30,9 +31,6 @@ class Sample:
         self.resolution = resolution
         self.landscape = interpolate.interp1d(self.points, self.point_loc)
 
-    def draw_landscape(self, ax):
-
-        ax.plot
 
 
 
