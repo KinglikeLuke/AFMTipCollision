@@ -10,7 +10,7 @@ class Tip:
         2d array :param corners: the coordinates of the corners  of the outline of the tip
         """
         self.corners = corners
-        self.shape = interpolate.interp1d(*corners)
+        self.shape = interpolate.interp1d(corners[:, 0], corners[:, 1])
 
 
 class Sample:
@@ -29,8 +29,12 @@ class Sample:
         self.points = points
         self.point_loc = point_loc
         self.resolution = resolution
-        self.landscape = interpolate.interp1d(self.points, self.point_loc)
+        self.landscape, self.landscape_coordinates = self.make_landscape()
 
-
-
-
+    def make_landscape(self):
+        left_edge = np.min(self.point_loc)
+        right_edge = np.max(self.point_loc)
+        pixel_count = (right_edge - left_edge) / self.resolution # hinfällig wegen arange statt linspace
+        landscape_coordinates = np.arange(left_edge, right_edge, self.resolution)
+        landscape = self.landscape_func(landscape_coordinates)
+        return landscape, landscape_coordinates
