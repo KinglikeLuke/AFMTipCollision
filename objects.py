@@ -31,8 +31,12 @@ class Sample:
         self.landscape = interpolate.interp1d(self.points, self.point_loc)
 
     def draw_landscape(self, ax):
-
-        ax.plot
+        left_edge = np.min(self.point_loc)
+        right_edge = np.max(self.point_loc)
+        pixel_count = (right_edge - left_edge) / self.resolution
+        landscape_coordinates = np.linspace(left_edge, right_edge, pixel_count)
+        landscape = self.landscape_func(landscape_coordinates)
+        ax.plot(landscape_coordinates, landscape)
 
 
 
