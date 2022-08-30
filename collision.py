@@ -78,7 +78,10 @@ class Collision(Sample):
         return ln,
 
     def update(self, frame, corners, x_data, y_data, ln):
-        ln.set_data(x_data[frame], y_data[frame])
+        low_point = np.argmin(corners[:, 1])
+        low_point_x = corners[low_point, 0]
+        low_point_y = corners[low_point, 1]
+        ln.set_data(corners[:,0] - low_point_x + x_data[frame], corners[:,1] - low_point_y + y_data[frame])
         return ln,
 
 
