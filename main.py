@@ -8,8 +8,8 @@ from collision import Collision
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-triangle = Collision(np.array([0, 1, 0, 2]), np.array([1, 2, 3, 4]), 0.05)
-a, b, ani = triangle.move_tip(np.array([[1, 0], [2.4, -1], [2.5, 0.5]]), do_animation=True)
+random_surface = Collision(np.random.normal(1, 5, 100), np.logspace(0.1, 1, 100), 0.01)
+x_movement, y_movement, animation, ax = random_surface.move_tip(np.array([[1, 0], [1.1, -1], [1.2, -1], [1.4, 0]]),
+                                                                do_animation=True)
 plt.show()
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
