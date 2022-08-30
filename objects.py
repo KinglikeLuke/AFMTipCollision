@@ -29,12 +29,13 @@ class Sample:
         self.points = points
         self.point_loc = point_loc
         self.resolution = resolution
+        self.landscape_func = interpolate.interp1d(point_loc, points)
         self.landscape, self.landscape_coordinates = self.make_landscape()
 
     def make_landscape(self):
         left_edge = np.min(self.point_loc)
         right_edge = np.max(self.point_loc)
-        pixel_count = (right_edge - left_edge) / self.resolution # hinfällig wegen arange statt linspace
+        pixel_count = (right_edge - left_edge) / self.resolution  # hinfällig wegen arange statt linspace
         landscape_coordinates = np.arange(left_edge, right_edge, self.resolution)
         landscape = self.landscape_func(landscape_coordinates)
         return landscape, landscape_coordinates

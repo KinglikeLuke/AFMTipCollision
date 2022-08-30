@@ -4,13 +4,10 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from collision import Collision
+import numpy as np
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+Collision(np.array([0,1,0]), np.array([1,2,3]), 0.5)
+a = Collision.move_tip(np.array([[1,0], [2,-1], [2.5, 0.5]]))
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
