@@ -14,7 +14,12 @@ class Collision(Sample):
         :param tip_y: y-coordinates of the tip
         :return: minimal distance
         """
-        differences = tip_y - self.landscape_func(tip_x)
+        # Make sure that only the tip above the sample is checked
+        low_bound = tip_x >= min(self.point_loc)
+        high_bound = tip_x <= max(self.point_loc)
+        proper_bound = low_bound & high_bound
+
+        differences = tip_y[proper_bound] - self.landscape_func(tip_x[proper_bound])
         contact_difference = tip_y[np.argmin(differences)]
         return contact_difference
 
@@ -27,8 +32,8 @@ class Collision(Sample):
         _Tip = Tip(corners)
 
         low_point_x = corners[np.argmin(corners[:, 1]), 0]
-        left_point_x = min(corners[0,:])
-        right_point_x = max(corners[0,:])
+        left_point_x = min(corners[:, 0])
+        right_point_x = max(corners[:, 0])
         start_offset = min(self.landscape_coordinates) - low_point_x
         end_offset = max(self.landscape_coordinates) - low_point_x
         x_movements = np.arange(start_offset, end_offset, self.resolution)
