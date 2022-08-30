@@ -1,6 +1,10 @@
+import matplotlib.pyplot as plt
+
 from objects import Sample
 from objects import Tip
 import numpy as np
+from matplotlib.animation import FuncAnimation
+import functools
 
 
 class Collision(Sample):
@@ -23,10 +27,11 @@ class Collision(Sample):
 
         return min(differences)
 
-    def move_tip(self, corners):
+    def move_tip(self, corners, do_animation=False):
         """
         Makes a Tipshape and moves it along the landscape
         :param corners: 2d array, outline of the Tip (as coordinate pairs)
+        :param do_animation: bool, whether a animation of the tip moving should be played
         :return: path
         """
         _Tip = Tip(corners)
@@ -50,8 +55,33 @@ class Collision(Sample):
             distance = self.check_distance(tip_x, tip_y)
             tip_y = tip_y - distance            # correct the distance so the sample is always in contact
             y_movements.append(min(tip_y))
-
+        if do_animation:
+            ani = self.animation(corners, x_movements + low_point_x, y_movements)
+            return x_movements + low_point_x, y_movements, ani
         return x_movements + low_point_x, y_movements
+
+    def animation(self, corners, x_move, y_move):
+        fig, ax = plt.subplots()
+        ln, = plt.plot([], [], 'ro', ls='-')
+        update_corners = functools.partial(self.update, corners=corners, x_data=x_move, y_data=y_move, ln=ln,)
+        init_corners = functools.partial(self.init, ax=ax, ln=ln, )
+        ani = FuncAnimation(fig, update_corners, frames=range(len(x_move)), init_func=init_corners, blit=True)
+        return ani
+
+    def init(self, ax, ln):
+        ax.set_xlim(min(self.landscape_coordinates) - 10*self.resolution,
+                         max(self.landscape_coordinates) + 10*self.resolution)
+        ax.set_ylim(min(self.landscape) - 10*self.resolution,
+                         max(self.landscape) + 10*self.resolution)
+        ax.plot(self.landscape_coordinates, self.landscape)
+
+        return ln,
+
+    def update(self, frame, corners, x_data, y_data, ln):
+        ln.set_data(x_data[frame], y_data[frame])
+        return ln,
+
+
 
 
 

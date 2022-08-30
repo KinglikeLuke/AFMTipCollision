@@ -19,7 +19,7 @@ class Sample:
         :param points:  points that outline the contour of the sample
         :param point_loc: location of the points
         :param  resolution: increment of the landscape
-        :type resolution: int
+        :type resolution: float
         """
         try:
             points + point_loc
