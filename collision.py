@@ -5,6 +5,7 @@ from objects import Tip
 import numpy as np
 from matplotlib.animation import FuncAnimation
 import functools
+from pid import PID
 
 
 class Collision(Sample):
@@ -23,8 +24,8 @@ class Collision(Sample):
         low_bound = tip_x >= min(self.point_loc)
         high_bound = tip_x <= max(self.point_loc)
         proper_bound = low_bound & high_bound
-        differences = tip_y[proper_bound] - self.landscape_func(tip_x[proper_bound])
 
+        differences = tip_y[proper_bound] - self.landscape_func(tip_x[proper_bound])
         return min(differences)
 
     def move_tip(self, corners, do_animation=False):
@@ -35,7 +36,7 @@ class Collision(Sample):
         :return: path
         """
         _Tip = Tip(corners)
-
+        pid = PID(1, 1, 0.01)
         low_point = np.argmin(corners[:, 1])
         low_point_x = corners[low_point, 0]
         left_point_x = min(corners[:, 0])
@@ -53,7 +54,7 @@ class Collision(Sample):
         for x in x_movements:  # move it
             tip_x = tip_coordinates + x
             distance = self.check_distance(tip_x, tip_y)
-            tip_y = tip_y - distance  # correct the distance so the sample is always in contact
+            tip_y = tip_y - (pid.control(distance))  # correct the distance so the sample is always in contact
             y_movements.append(min(tip_y))
 
         y_movements = np.array(y_movements)

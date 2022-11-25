@@ -32,9 +32,6 @@ class Sample:
         self.landscape_func = interpolate.interp1d(point_loc, points)
         self.landscape, self.landscape_coordinates = self.make_landscape()
 
-    def draw_landscape(self, ax):
-        ax.plot(self.landscape_coordinates, self.landscape)
-
     def make_landscape(self):
         left_edge = np.min(self.point_loc)
         right_edge = np.max(self.point_loc)
